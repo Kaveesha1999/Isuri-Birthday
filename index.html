@@ -430,7 +430,7 @@
       });
       floatingDecorations();
       launchFireworks();
-      setTimeout(showNote, 3200);
+      setTimeout(showNote, 5200);
     }
 
     function floatingDecorations() {
@@ -456,7 +456,7 @@
           firework.style.left = Math.random() * 90 + 5 + "vw";
           firework.style.top = Math.random() * 65 + 8 + "vh";
           document.body.appendChild(firework);
-          setTimeout(() => firework.remove(), 1000);
+          setTimeout(() => firework.remove(), 1500);
         }, i * 160);
       }
     }
