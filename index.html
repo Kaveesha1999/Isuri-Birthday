@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Welcome Princess Isuri | Birthday Surprise</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", Arial, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100svh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255,247,178,0.55), transparent 28%),
+        linear-gradient(135deg, #ff9a9e 0%, #fad0c4 32%, #fbc2eb 65%, #a18cd1 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    }
+
+    .sparkle-bg,
+    .sparkle-bg::before,
+    .sparkle-bg::after {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.85) 1.5px, transparent 2px),
+        radial-gradient(circle, rgba(255,247,178,0.85) 1.5px, transparent 2px);
+      background-size: 80px 80px, 120px 120px;
+      animation: shimmer 9s linear infinite;
+      z-index: 0;
+    }
+
+    .sparkle-bg::before,
+    .sparkle-bg::after {
+      content: "";
+    }
+
+    .sparkle-bg::before {
+      transform: rotate(18deg);
+      opacity: 0.5;
+    }
+
+    .sparkle-bg::after {
+      transform: rotate(-12deg);
+      opacity: 0.35;
+    }
+
+    .card {
+      max-width: 850px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.42);
+      border-radius: 38px;
+      padding: clamp(26px, 6vw, 44px) clamp(16px, 5vw, 28px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 28px 90px rgba(91, 38, 130, 0.35);
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 38px;
+      padding: 3px;
+      background: linear-gradient(135deg, #fff7b2, #ff8cc6, #b388ff, #fff7b2);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 11px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      margin-bottom: 18px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #fff7b2;
+    }
+
+    .crown {
+      font-size: 4.2rem;
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.22));
+      animation: float 2.8s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 8vw, 5.8rem);
+      line-height: 1;
+      margin: 12px 0 18px;
+      text-shadow: 0 10px 26px rgba(89, 33, 126, 0.35);
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 5vw, 3rem);
+      margin-bottom: 20px;
+      color: #fff7b2;
+      text-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    }
+
+    p {
+      font-size: clamp(1rem, 2.8vw, 1.25rem);
+      line-height: 1.8;
+      margin: 0 auto 28px;
+      max-width: 670px;
+    }
+
+    .photo-frame {
+      width: clamp(170px, 52vw, 220px);
+      height: clamp(170px, 52vw, 220px);
+      margin: 10px auto 24px;
+      border-radius: 50%;
+      border: 7px solid rgba(255, 247, 178, 0.92);
+      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.12));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(3.4rem, 15vw, 4.5rem);
+      box-shadow: 0 18px 45px rgba(83, 37, 121, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-frame.has-photo .placeholder {
+      display: none;
+    }
+
+    .photo-frame.has-photo img {
+      display: block;
+    }
+
+    .photo-frame::after {
+      content: "Isuri Photo";
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(127, 83, 172, 0.72);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      padding: 15px 24px;
+      min-height: 52px;
+      min-width: 190px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      color: #7f3db1;
+      background: #fff7b2;
+      box-shadow: 0 13px 30px rgba(86, 36, 120, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button.secondary {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 18px 38px rgba(83, 37, 121, 0.35);
+    }
+
+    .section {
+      display: none;
+      animation: pop 0.8s ease forwards;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .note-box {
+      margin-top: 24px;
+      padding: 26px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .note-box strong {
+      color: #fff7b2;
+      font-size: 1.2rem;
+    }
+
+    .floating {
+      position: fixed;
+      top: -30px;
+      font-size: 24px;
+      animation: fall linear forwards;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .firework {
+      position: fixed;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff7b2;
+      box-shadow:
+        0 -42px #fff,
+        30px -30px #ff8cc6,
+        42px 0 #fff7b2,
+        30px 30px #b388ff,
+        0 42px #fff,
+        -30px 30px #ff8cc6,
+        -42px 0 #fff7b2,
+        -30px -30px #b388ff;
+      animation: explode 0.9s ease-out forwards;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: scale(0.88) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    @keyframes shimmer {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 180px 240px, -160px 220px; }
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(0.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2.4);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        align-items: flex-start;
+      }
+
+      .card {
+        width: 100%;
+        min-height: calc(100svh - 36px);
+        padding: 28px 16px;
+        border-radius: 28px;
+      }
+
+      .badge {
+        font-size: 0.78rem;
+        padding: 9px 14px;
+      }
+
+      .crown {
+        font-size: 3.2rem;
+      }
+
+      h1 {
+        font-size: clamp(2.25rem, 12vw, 3.75rem);
+      }
+
+      h2 {
+        font-size: clamp(1.35rem, 7vw, 2.1rem);
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      .button-row {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      button {
+        width: 100%;
+        max-width: 320px;
+        font-size: 0.98rem;
+      }
+
+      .note-box {
+        padding: 20px 14px;
+      }
+    }
+
+    @media (min-width: 390px) and (max-width: 460px) {
+      .card {
+        max-width: 430px;
+      }
+
+      .photo-frame {
+        width: 205px;
+        height: 205px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sparkle-bg"></div>
+
+  <!-- Add your own music file here. Rename your birthday song to happy-birthday.mpeg and place it in the same GitHub folder. -->
+  <audio id="birthdayMusic" src="happy-birthday.mpeg"></audio>
+  <audio id="fireworkSound" src="fireworks.mpeg"></audio>
+
+  <main class="card">
+    <section id="welcome" class="section active">
+      <div class="crown">👑</div>
+      <div class="badge">A Royal Birthday Surprise</div>
+      <h1>Welcome Princess</h1>
+      <div id="photoFrame" class="photo-frame">
+        <!-- Put your uploaded photo in the same GitHub folder and rename it to isuri.jpeg, then remove the emoji placeholder if you want. -->
+        <img src="isuri.jpeg" alt="Isuri Photo" onload="document.getElementById('photoFrame').classList.add('has-photo')" />
+        <span class="placeholder">👸</span>
+      </div>
+      <p>
+        A magical birthday surprise is waiting for you. Open it slowly and enjoy every sparkle made just for you.
+      </p>
+      <button onclick="showCelebrate()">Enter the Surprise ✨</button>
+    </section>
+
+    <section id="celebrate" class="section">
+      <div class="crown">🎂</div>
+      <div class="badge">Today Is Your Day</div>
+      <h1>Let’s Celebrate Your Birthday!</h1>
+      <h2>Happy Birthday, Princess Isuri</h2>
+      <p>
+        May your heart be full of joy, your smile shine brighter than stars, and your life be filled with beautiful dreams, Isuri.
+      </p>
+      <div class="button-row">
+        <button onclick="startParty()">Play Music & Fireworks 🎆</button>
+        <button class="secondary" onclick="showNote()">Read My Note 💌</button>
+      </div>
+    </section>
+
+    <section id="note" class="section">
+      <div class="crown">💖</div>
+      <div class="badge">A Little Note</div>
+      <h1>For You</h1>
+      <div class="note-box">
+        <p>
+          <strong>Dear Princess Isuri,</strong><br />
+          On your special day, I just want to say that you are amazing, beautiful, and truly special.
+          May this birthday bring you happiness, love, success, and unforgettable memories.
+          Keep smiling always, because your smile makes the world brighter. 💕
+        </p>
+        <p>With lots of love,<br><strong>Kaveesha</strong></p>
+      </div>
+      <div class="button-row">
+        <button onclick="startParty()">More Fireworks 🎇</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll(".section").forEach(section => {
+        section.classList.remove("active");
+      });
+      document.getElementById(sectionId).classList.add("active");
+    }
+
+    function showCelebrate() {
+      showSection("celebrate");
+      floatingDecorations();
+    }
+
+    function showNote() {
+      showSection("note");
+      floatingDecorations();
+    }
+
+    function startParty() {
+      const music = document.getElementById("birthdayMusic");
+      const fireworkSound = document.getElementById("fireworkSound");
+
+      music.play().catch(() => {
+        alert("Music file not found. Add happy-birthday.mpeg to your GitHub folder.");
+      });
+
+      fireworkSound.currentTime = 0;
+      fireworkSound.play().catch(() => {
+        console.log("Firework sound file not found. Add fireworks.mpeg to your GitHub folder.");
+      });
+      floatingDecorations();
+      launchFireworks();
+      setTimeout(showNote, 3200);
+    }
+
+    function floatingDecorations() {
+      const emojis = ["💖", "🎈", "🎉", "✨", "🎂", "🌸", "👑", "💝"];
+      for (let i = 0; i < 55; i++) {
+        const item = document.createElement("div");
+        item.className = "floating";
+        item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        item.style.left = Math.random() * 100 + "vw";
+        item.style.animationDuration = Math.random() * 3 + 3 + "s";
+        item.style.fontSize = Math.random() * 24 + 18 + "px";
+        document.body.appendChild(item);
+
+        setTimeout(() => item.remove(), 7000);
+      }
+    }
+
+    function launchFireworks() {
+      for (let i = 0; i < 24; i++) {
+        setTimeout(() => {
+          const firework = document.createElement("div");
+          firework.className = "firework";
+          firework.style.left = Math.random() * 90 + 5 + "vw";
+          firework.style.top = Math.random() * 65 + 8 + "vh";
+          document.body.appendChild(firework);
+          setTimeout(() => firework.remove(), 1000);
+        }, i * 160);
+      }
+    }
+  </script>
+</body>
+</html>
